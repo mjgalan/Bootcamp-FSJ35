@@ -33,11 +33,11 @@ class ProductController{
     }
 
     public function create(){
-        print_r($_POST);
-        print($_POST['nombre']);
-        print($_POST['precio']);
-        print($_POST['descuento']);
-        print($_POST['cantidad']);
+        //print_r($_POST);
+        //print($_POST['nombre']);
+        //print($_POST['precio']);
+        //print($_POST['descuento']);
+        //print($_POST['cantidad']);
 
         
 
@@ -57,18 +57,30 @@ class ProductController{
     }
 
     public function update(){
-        print($_GET['id']);
+
+        if (isset($_GET['id'])) {
+        //print($_GET['id']);
         $id = $_GET['id'];
 
         //RETO: OBTENER EL PRODUCTO POR ID CON getById($id) y guardarlo en una variable
+        $product = $this->productModel->getById($id);
 
+        //print_r($product);
+        
+        }
 
         if( $_SERVER["REQUEST_METHOD"] === "POST"){
-       
+
+        $id =  $_POST['id'];
+        //print($id);
         $nombre = $_POST['nombre'];
+        //print($nombre);
         $precio = $_POST['precio'];
+        //print($precio);
         $descuento = $_POST['descuento'];
+        //print($descuento);
         $cantidad = $_POST['cantidad'];
+        //print($cantidad);
 
         $this->productModel->update($id,$nombre,$precio,$descuento,$cantidad);
         header('Location: ./index.php?action=read');
@@ -79,6 +91,16 @@ class ProductController{
     }
 
     public function delete(){
+
+        if (isset($_GET['id'])) {
+        print($_GET['id']);
+        $id = $_GET['id'];
+            $this->productModel->delete($id);
+            header('Location: ./index.php?action=read');
+            exit();
+        
+        
+        }
 
     }
 }
