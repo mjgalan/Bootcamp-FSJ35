@@ -12,7 +12,7 @@
             <h2 class="text-center">Editar producto</h2>
         <section class="d-flex justify-content-center">
             <article class="card col-8" >
-             <form class="form-control" action="./index.php?action=create" method="POST">
+             <form class="form-control" action="./index.php?action=update" method="POST">
                 <label class="form-label" for="">Nombre</label>
                 <input class='form-control' type="text" name="nombre" value="<?php echo $product['nombre']?>">
                 <label class="form-label" for="">Precio</label>
@@ -21,6 +21,7 @@
                 <input class='form-control' type="text" name="descuento" value="<?php echo $product['descuento']?>">
                 <label class="form-label" for="">Cantidad</label>
                 <input class="form-control" name="cantidad" value="<?php echo $product['cantidad']?>">
+                <input type="hidden" name="id" value="<?php echo $product['id']; ?>">
                 <button class="btn btn-success mt-2" type="submit">Editar</button>
             </form>
             </article>
