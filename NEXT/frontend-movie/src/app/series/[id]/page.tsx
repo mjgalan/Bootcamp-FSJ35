@@ -31,8 +31,8 @@ export default async function SeriesDetailPage({
         <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 to-transparent" />
       </div>
 
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-        <Link href="/series" className="text-sm text-red-400 hover:underline">
+      <div className="mx-auto max-w-7xl rounded-2xl bg-white px-4 py-8 text-black sm:px-6">
+        <Link href="/series" className="text-sm text-red-600 hover:underline">
           ← Volver a series
         </Link>
 
@@ -41,7 +41,7 @@ export default async function SeriesDetailPage({
             {series.poster_url ? (
               <Image src={series.poster_url} alt={series.title} fill className="object-cover" />
             ) : (
-              <div className="flex h-full w-full items-center justify-center bg-zinc-800">
+              <div className="flex h-full w-full items-center justify-center bg-zinc-200 text-zinc-500">
                 Sin imagen
               </div>
             )}
@@ -49,9 +49,9 @@ export default async function SeriesDetailPage({
 
           <div className="flex-1">
             <h1 className="text-3xl font-bold sm:text-4xl">{series.title}</h1>
-            <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-zinc-300">
+            <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-zinc-700">
               {series.rating !== null && (
-                <span className="rounded bg-yellow-500/20 px-2 py-1 text-yellow-400">
+                <span className="rounded bg-yellow-100 px-2 py-1 text-yellow-700">
                   ★ {series.rating}
                 </span>
               )}
@@ -64,14 +64,14 @@ export default async function SeriesDetailPage({
                 {series.genre.map((g) => (
                   <span
                     key={g}
-                    className="rounded-full bg-zinc-800 px-3 py-1 text-xs text-zinc-300"
+                    className="rounded-full bg-zinc-200 px-3 py-1 text-xs text-zinc-700"
                   >
                     {g}
                   </span>
                 ))}
               </div>
             )}
-            <p className="mt-6 leading-relaxed text-zinc-200">
+            <p className="mt-6 leading-relaxed text-black">
               {series.description ?? "Sin descripción disponible."}
             </p>
             <div className="mt-6">
