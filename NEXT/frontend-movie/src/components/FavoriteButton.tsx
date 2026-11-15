@@ -41,7 +41,7 @@ export default function FavoriteButton({ id, kind }: Props) {
       className={`rounded-md px-4 py-2 text-sm font-medium transition ${
         isFav
           ? "bg-red-600 text-white hover:bg-red-700"
-          : "border border-white/20 text-white hover:bg-white/10"
+          : "border border-zinc-300 text-black hover:bg-zinc-100"
       }`}
     >
       {isFav ? "♥ En favoritos" : "♡ Agregar a favoritos"}
