@@ -84,6 +84,10 @@ Documento que registra el proceso de creación del proyecto **frontend-movie** m
 - **Resolución**: uso de `-LiteralPath` en los comandos de copia.
 
 ### 4.8 Lint escaneando `.vercel/output`
+
+### 4.9 "Agregar a favoritos no funcionaba"
+- **Problema**: la página de Favoritos resolvía los ítems guardados únicamente contra los datos mock. Si el id correspondía a una película/serie real de Supabase (UUID), no se encontraba y el elemento desaparecía, por lo que parecía que agregar no funcionaba.
+- **Resolución**: `src/app/favorites/page.tsx` ahora obtiene el catálogo real (Supabase con fallback a mock) y resuelve los favoritos contra esos datos; muestra los mock-resueltos de inmediato para feedback instantáneo mientras carga el catálogo real en segundo plano.
 - **Problema**: tras el intento de deploy, ESLint reportaba miles de errores en archivos generados.
 - **Resolución**: se añadió `.vercel/**` a `globalIgnores` en `eslint.config.mjs`.
 
