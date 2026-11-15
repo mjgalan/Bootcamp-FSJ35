@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { createClient } from "@/lib/supabase/client";
 import { mockMovies, mockSeries } from "@/lib/mock-data";
 import type { Movie, Series } from "@/lib/types";
 import MovieCard from "@/components/MovieCard";
@@ -11,16 +12,49 @@ type FavItem = { kind: "movie" | "series"; id: string };
 
 export default function FavoritesPage() {
   const [favIds, setFavIds] = useState<FavItem[]>([]);
+  const [movies, setMovies] = useState<Movie[]>([]);
+  const [series, setSeries] = useState<Series[]>([]);
   const [loaded, setLoaded] = useState(false);
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem("favorites");
-      if (raw) setFavIds(JSON.parse(raw));
-    } catch {
-      setFavIds([]);
+    let cancelled = false;
+
+    async function load() {
+      // Read favorites from localStorage
+      let stored: FavItem[] = [];
+      try {
+        const raw = localStorage.getItem("favorites");
+        if (raw) stored = JSON.parse(raw);
+      } catch {
+        stored = [];
+      }
+      if (cancelled) return;
+      setFavIds(stored);
+
+      // Show mock-resolved items immediately for instant feedback
+      setMovies(mockMovies);
+      setSeries(mockSeries);
+      setLoaded(true);
+
+      // Then fetch real catalog (Supabase) in background to resolve real ids
+      try {
+        const supabase = createClient();
+        const [{ data: mData }, { data: sData }] = await Promise.all([
+          supabase.from("movies").select("*"),
+          supabase.from("series").select("*"),
+        ]);
+        if (cancelled) return;
+        if (mData && mData.length) setMovies(mData as Movie[]);
+        if (sData && sData.length) setSeries(sData as Series[]);
+      } catch {
+        // keep mock data already set
+      }
     }
-    setLoaded(true);
+
+    load();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const remove = (item: FavItem) => {
@@ -28,25 +62,34 @@ export default function FavoritesPage() {
       const next = prev.filter(
         (f) => !(f.kind === item.kind && f.id === item.id)
       );
-      localStorage.setItem("favorites", JSON.stringify(next));
+      try {
+        localStorage.setItem("favorites", JSON.stringify(next));
+      } catch {
+        // ignore
+      }
       return next;
     });
   };
 
   const favMovies = favIds
     .filter((f) => f.kind === "movie")
-    .map((f) => mockMovies.find((m) => m.id === f.id))
+    .map((f) => movies.find((m) => m.id === f.id))
     .filter(Boolean) as Movie[];
 
   const favSeries = favIds
     .filter((f) => f.kind === "series")
-    .map((f) => mockSeries.find((s) => s.id === f.id))
+    .map((f) => series.find((s) => s.id === f.id))
     .filter(Boolean) as Series[];
 
   if (!loaded) {
     return (
       <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
         <div className="h-8 w-40 animate-pulse rounded bg-zinc-800" />
+        <div className="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4">
+          {Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="aspect-[2/3] animate-pulse rounded-xl bg-zinc-800" />
+          ))}
+        </div>
       </div>
     );
   }
