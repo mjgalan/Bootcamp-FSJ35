@@ -101,7 +101,13 @@ frontend-movie/
 └── README.md
 ```
 
-## 6. Comandos de verificación
+## 6. Despliegue (Vercel)
+
+- **URL pública**: https://bootcamp-fsj35-frontend-movie.vercel.app/
+- Desplegado desde el repositorio dedicado `mjgalan/bootcamp-fsj35-frontend-movie` (rama `main`).
+- Variables de entorno configuradas en Vercel: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`.
+
+## 7. Comandos de verificación
 
 ```bash
 npm run build   # debe pasar sin errores
